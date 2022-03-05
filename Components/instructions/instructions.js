@@ -7,12 +7,23 @@ import { BsSearch } from "react-icons/bs";
 
 export default function Instructions({ data }) {
   const [text, setText] = useState("");
+  const [colour, setColour] = useState("#1c7ed6");
+  const [active, setActive] = useState(-1);
+  const [visited, setVisited] = useState([]);
 
   function sayHello(text) {
     let utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "fr-FR";
     console.log(this);
     speechSynthesis.speak(utterance);
+
+    utterance.addEventListener("end", function (event) {
+      setActive(-1);
+    });
+  }
+
+  function inVisited(elt) {
+    return visited.includes(elt);
   }
 
   useEffect(() => {
@@ -38,18 +49,30 @@ export default function Instructions({ data }) {
             <div
               key={idx}
               onClick={() => {
+                console.log(idx);
                 setText(d.instruction);
+                setActive(idx);
+                setVisited(visited.concat(idx));
               }}
               style={{
                 fontFamily: "Greycliff CF, sans-serif",
-                border: "#1c7ed6 2px solid",
+                border: `${
+                  active === idx ? "#F5B611 5px" : "#1c7ed6 2px"
+                }  solid`,
+                background: `${inVisited(idx) ? "#DEF0F2" : ""}`,
                 borderRadius: 10,
                 padding: 10,
                 margin: 10,
+                cursor: "pointer",
               }}
             >
               <Title order={3}>{d.step}</Title>
-              <Text align="left" size="xl" weight={700} color="blue">
+              <Text
+                align="left"
+                size="xl"
+                weight={700}
+                color={inVisited(idx) ? "dimmed" : "blue"}
+              >
                 <p>{d.instruction}</p>
               </Text>
             </div>

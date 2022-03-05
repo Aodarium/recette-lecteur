@@ -4,12 +4,17 @@ import { useState, useEffect } from "react";
 
 export default function Ingredients({ data }) {
   const [text, setText] = useState("");
+  const [colour, setColour] = useState("");
+  const [active, setActive] = useState(-1);
 
   function sayHello(text) {
     let utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "fr-FR";
     console.log(this);
     speechSynthesis.speak(utterance);
+    utterance.addEventListener("end", function (event) {
+      setActive(-1);
+    });
   }
 
   useEffect(() => {
@@ -37,6 +42,7 @@ export default function Ingredients({ data }) {
             <Card
               onClick={() => {
                 setText(d.ingredient);
+                setActive(idx);
               }}
               key={idx}
               shadow="sm"
@@ -44,9 +50,11 @@ export default function Ingredients({ data }) {
               component="a"
               target="_blank"
               style={{
+                border: `${active === idx ? "#F5B611 5px solid" : ""} `,
                 width: 200,
                 height: 200,
                 margin: 20,
+                cursor: "pointer",
               }}
             >
               <Card.Section
