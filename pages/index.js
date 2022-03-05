@@ -48,7 +48,7 @@ export default function Home() {
           >
             <TextInput
               placeholder="Lien"
-              label="Copie le lien de la recette ici"
+              label="Copie l'adresse URL de la recette vue sur https://www.marmiton.org/ ici"
               radius="xl"
               size="xl"
               required
